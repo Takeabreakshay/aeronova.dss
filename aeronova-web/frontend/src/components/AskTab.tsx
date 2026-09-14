@@ -67,7 +67,7 @@ export function AskTab({ params, setParams }: { params: Params; setParams: (p: P
               <button
                 key={p}
                 onClick={() => send(p)}
-                className="rounded-full border border-border bg-sunken px-3 py-1.5 font-mono text-[11px] text-muted-foreground transition-[transform,border-color,color,background-color] duration-150 ease-out-expo hover:-translate-y-px hover:border-primary hover:text-ground active:scale-[0.97] animate-rise"
+                className="rounded-full border border-border bg-sunken px-3 py-1.5 font-mono text-[11px] text-muted-foreground transition-[transform,border-color,color,background-color] duration-150 ease-out-expo hover:-translate-y-px hover:border-primary hover:text-ink active:scale-[0.97] animate-rise"
                 style={{ animationDelay: `${80 + i * 40}ms` }}
               >
                 {p}
@@ -90,7 +90,7 @@ export function AskTab({ params, setParams }: { params: Params; setParams: (p: P
                 className={`grid h-7 w-7 place-items-center rounded-full flex-shrink-0 ${
                   m.role === "user"
                     ? "bg-sunken text-muted-foreground"
-                    : "bg-accent text-ground shadow-[0_0_14px_hsl(258_90%_66%_/_0.55)]"
+                    : "bg-accent text-ground shadow-[0_0_14px_rgba(139,26,26,0.55)]"
                 }`}
               >
                 <HugeiconsIcon
@@ -108,7 +108,7 @@ export function AskTab({ params, setParams }: { params: Params; setParams: (p: P
         {busy && (
           <Card className="p-4 border-accent/[0.30] bg-gradient-to-br from-accent/[0.06] to-accent/[0.03] animate-rise">
             <div className="flex items-center gap-3">
-              <div className="grid h-7 w-7 place-items-center rounded-full flex-shrink-0 bg-accent text-ground shadow-[0_0_12px_hsl(258_90%_66%_/_0.4)]">
+              <div className="grid h-7 w-7 place-items-center rounded-full flex-shrink-0 bg-accent text-ground shadow-[0_0_12px_rgba(139,26,26,0.4)]">
                 <HugeiconsIcon icon={Loading03Icon} size={14} strokeWidth={1.6} className="animate-spin" />
               </div>
               <div className="flex-1 font-mono text-[12px] text-muted-foreground">

@@ -41,7 +41,7 @@ export const Slider = React.forwardRef<
         "w-full h-1.5 bg-sunken rounded-full appearance-none cursor-pointer",
         "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5",
         "[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary",
-        "[&::-webkit-slider-thumb]:shadow-[0_0_12px_hsl(258_90%_66%_/_0.6)]",
+        "[&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(139,26,26,0.6)]",
         "[&::-webkit-slider-thumb]:transition-transform hover:[&::-webkit-slider-thumb]:scale-125",
         className
       )}

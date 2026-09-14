@@ -30,7 +30,7 @@ export const TabsTrigger = React.forwardRef<
       "transition-[background-color,color,transform] duration-150 ease-out",
       "hover:bg-accent/40 hover:text-foreground",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-      "data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary data-[state=active]:to-[hsl(0_68%_33%)] data-[state=active]:text-ground data-[state=active]:shadow-[0_4px_14px_hsl(258_90%_45%_/_0.35)]",
+      "data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary data-[state=active]:to-[hsl(0_68%_33%)] data-[state=active]:text-ground data-[state=active]:shadow-[0_4px_14px_rgba(139,26,26,0.35)]",
       className
     )}
     {...props}
