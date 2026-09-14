@@ -90,7 +90,7 @@ export function AskTab({ params, setParams }: { params: Params; setParams: (p: P
                 className={`grid h-7 w-7 place-items-center rounded-full flex-shrink-0 ${
                   m.role === "user"
                     ? "bg-sunken text-muted-foreground"
-                    : "bg-accent text-ground shadow-[0_0_14px_rgba(139,26,26,0.55)]"
+                    : "bg-accent text-ground shadow-[0_0_14px_rgba(30, 64, 175,0.55)]"
                 }`}
               >
                 <HugeiconsIcon
@@ -108,7 +108,7 @@ export function AskTab({ params, setParams }: { params: Params; setParams: (p: P
         {busy && (
           <Card className="p-4 border-accent/[0.30] bg-gradient-to-br from-accent/[0.06] to-accent/[0.03] animate-rise">
             <div className="flex items-center gap-3">
-              <div className="grid h-7 w-7 place-items-center rounded-full flex-shrink-0 bg-accent text-ground shadow-[0_0_12px_rgba(139,26,26,0.4)]">
+              <div className="grid h-7 w-7 place-items-center rounded-full flex-shrink-0 bg-accent text-ground shadow-[0_0_12px_rgba(30, 64, 175,0.4)]">
                 <HugeiconsIcon icon={Loading03Icon} size={14} strokeWidth={1.6} className="animate-spin" />
               </div>
               <div className="flex-1 font-mono text-[12px] text-muted-foreground">

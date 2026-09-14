@@ -39,32 +39,32 @@
     --ink-faint:   #A8998A;   /* deep meta */
     --rule:        #E4DDD0;   /* hairline dividers */
     --rule-2:      #D0C7B4;   /* stronger dividers */
-    --accent:      #8B1A1A;   /* oxblood — the one accent */
-    --accent-soft: #F1E1E1;
-    --accent-2:    #6B1414;
-    --good:        #3D5A3D;   /* semantic — decision verdicts */
+    --accent:      #1E40AF;   /* cobalt blue — striking on cream */
+    --accent-soft: #DBEAFE;
+    --accent-2:    #1E3A8A;
+    --good:        #3D5A3D;   /* semantic — decision verdicts (unchanged) */
     --good-soft:   #DEE7DE;
     --warn:        #B87811;
     --warn-soft:   #F4E7CE;
-    --crit:        #8B1A1A;
-    --crit-soft:   #F1E1E1;
+    --crit:        #B91C1C;   /* semantic red (kept separate from brand accent) */
+    --crit-soft:   #FEE2E2;
 
     /* Tailwind bridge */
     --background: 40 33% 96%;   /* ground */
     --foreground: 20 12% 10%;   /* ink */
     --card: 42 60% 98%;
     --card-foreground: 20 12% 10%;
-    --primary: 0 68% 33%;       /* accent */
+    --primary: 226 71% 40%;     /* cobalt accent */
     --primary-foreground: 40 33% 96%;
     --secondary: 44 33% 91%;
     --secondary-foreground: 20 12% 10%;
     --muted: 44 33% 91%;
     --muted-foreground: 30 8% 38%;
-    --accent-hsl: 0 68% 33%;
+    --accent-hsl: 226 71% 40%;
     --accent-foreground: 40 33% 96%;
     --border: 40 26% 85%;
     --input: 40 26% 85%;
-    --ring: 0 68% 33%;
+    --ring: 226 71% 40%;
     --radius: 4px;
   }
 

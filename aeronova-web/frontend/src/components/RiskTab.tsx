@@ -119,7 +119,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
                   }}
                   formatter={(v: any) => [`${v} trials`, "count"]}
                   labelFormatter={(v: any) => `Rs ${formatRs(v)}`}
-                  cursor={{ fill: "rgba(139, 26, 26, 0.08)" }}
+                  cursor={{ fill: "rgba(30, 64, 175, 0.08)" }}
                 />
                 <ReferenceLine
                   x={risk.p5}

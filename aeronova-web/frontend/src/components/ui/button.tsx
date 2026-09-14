@@ -9,9 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-br from-primary to-pink text-ground shadow-[0_4px_16px_rgba(139,26,26,0.4)] hover:brightness-110 hover:shadow-[0_8px_24px_rgba(139,26,26,0.55)]",
+          "bg-gradient-to-br from-primary to-pink text-ground shadow-[0_4px_16px_rgba(30, 64, 175,0.4)] hover:brightness-110 hover:shadow-[0_8px_24px_rgba(30, 64, 175,0.55)]",
         secondary:
-          "bg-sunken text-foreground border border-border hover:border-primary hover:text-ink hover:-translate-y-px hover:shadow-[0_4px_14px_rgba(139,26,26,0.28)]",
+          "bg-sunken text-foreground border border-border hover:border-primary hover:text-ink hover:-translate-y-px hover:shadow-[0_4px_14px_rgba(30, 64, 175,0.28)]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         outline:
           "border border-border bg-background hover:bg-accent hover:text-accent-foreground",
