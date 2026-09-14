@@ -98,10 +98,14 @@ def optimize(params: dict | None = None) -> Solution:
     for (t, r) in banned:
         prob += x[(t, r)] == 0, f"ban_{t}_{r}"
 
-    # R6: only B or C, and at most one aircraft-type RT
+    # F9 — R6 rule per brief Exhibit 3:
+    #   "At least one daily round trip must use Type B or C."
+    # NOT "only B/C" and NOT capped at one. Type A may fly R6 alongside a B/C.
+    # Only bind the constraint when R6 actually operates (y["R6"] = 1).
     if restrictions.get("R6_only_BC", True):
-        prob += x[("A", "R6")] == 0, "R6_no_A"
-        prob += x[("B", "R6")] + x[("C", "R6")] <= 1, "R6_one_BC_max"
+        prob += (
+            x[("B", "R6")] + x[("C", "R6")] >= y["R6"]
+        ), "R6_at_least_one_BC"
 
     # Fleet availability: sum over routes of x[t,r] * rth <= count * maxhrs
     for t in TYPES:

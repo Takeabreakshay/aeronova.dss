@@ -132,12 +132,22 @@ def recover(
                 del revised[(t, r)]
 
     # ---- 3. Reserve deployment decision ----
-    # Fixes F2: value recovered = what the RESERVE'S seat count can carry,
-    # not what the original (possibly bigger) type would have carried.
+    # F2: value recovered = what the RESERVE'S seat count can carry,
+    #     not what the original (possibly bigger) type would have carried.
+    # F11 (brief Reserve Policy): "A reserve aircraft may substitute for any
+    #     unavailable aircraft of equal or smaller seat class." So reserve A
+    #     may only substitute for A; reserve B for A or B; reserve C for
+    #     A/B/C. If reserve is SMALLER than the failed aircraft, refuse the
+    #     substitution outright — it's not eligible per the brief, no matter
+    #     how the economics work out.
     reserve_deployed = False
     reserve_recovered_value = 0.0
+    reserve_ineligible = False
     proto: List[Tuple[str, str]] = []
-    if reserve_type in TYPES and cancelled:
+    SEAT_RANK = {t: fleet[t]["seats"] for t in TYPES}
+    if reserve_type in TYPES and SEAT_RANK[reserve_type] < SEAT_RANK[failed_type]:
+        reserve_ineligible = True
+    if reserve_type in TYPES and cancelled and not reserve_ineligible:
         banned = {tuple(b) for b in params.get("restrictions", {}).get("banned", [])}
         # Rank cancellations by ISOLATED profit of RESERVE type (descending).
         cand_scored = []
@@ -191,6 +201,12 @@ def recover(
         "protected_routes": protected_routes,
         "reserve_type": reserve_type,
         "reserve_deployed": reserve_deployed,
+        "reserve_ineligible": reserve_ineligible,
+        "reserve_ineligible_reason": (
+            f"Reserve type {reserve_type} has {SEAT_RANK.get(reserve_type, '?')} seats; "
+            f"failed aircraft {failed_type} has {SEAT_RANK.get(failed_type, '?')} seats. "
+            "Brief allows substitution only for equal or smaller seat class."
+        ) if reserve_ineligible else None,
         "reserve_recovered_value": round(reserve_recovered_value, 2),
         "mob_cost": params["MOB"],
         "loss_without_reserve": round(loss_without_reserve, 2),

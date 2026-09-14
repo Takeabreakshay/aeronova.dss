@@ -30,7 +30,8 @@ DEFAULT_PARAMS = {
     # 1,01,040) hold exactly with the ψ=2 revenue formulation. Update to whatever
     # the analytical spec finalizes.
     "beta": 900,
-    "fuel_mult": 1.00,    # deterministic run; simulator overrides
+    "fuel_mult": 1.00,    # deterministic run; simulator overrides with brief Exhibit 5 distribution
+    "avail_p": 0.96,      # F13: brief Exhibit 6 — per-aircraft availability
     "reserve_type": None, # None | "A" | "B" | "C"
     "strategy": "profit", # "profit" | "service" | "resilient"
     "min_service_override": {},  # optional per-route round-trip floors

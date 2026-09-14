@@ -21,12 +21,17 @@ def simulate(
 ) -> RiskResult:
     """Run `trials` day-scenarios against a frozen schedule.
 
-    Randomness:
-      - Route demand    ~ Normal(mean=demand, sd=15% of demand)
-      - Fuel multiplier ~ Normal(mean=params['fuel_mult'], sd=0.08), clipped >=0.7
-      - Aircraft avail  ~ Bernoulli(p=params.get('avail_p', 0.97)) per aircraft
-        If any aircraft of a type fails, we scale that type's RTs by
-        (working/total) and the shortfall flows into spill and cancel_rate.
+    Randomness — matched to the case brief Exhibits 5/6 and the "Additional
+    uncertainty" section:
+      - Route demand   ~ Normal(mean, 15% of mean) truncated at 0 with a
+                         common shock so bad days hit multiple routes
+      - Fuel scenario  ~ Discrete Categorical(brief Exhibit 5): Low 0.20 x 0.92,
+                         Base 0.55 x 1.00, High 0.25 x 1.18 (F12)
+      - Aircraft avail ~ Bernoulli(p=params.get('avail_p', 0.96)) per aircraft
+                         (F13 — brief Exhibit 6)
+      - Weather day    ~ Bernoulli(0.08). On weather days, usable aircraft
+                         hours across the whole fleet drop 10% (F15)
+      - Fare volatility Normal(1, 0.04) per trial per route → ~±8% at 2σ (F16)
     """
     rng = np.random.default_rng(seed)
 
@@ -38,7 +43,7 @@ def simulate(
     MOB = params["MOB"]
     reserve_type = params.get("reserve_type")
     fuel_base = params.get("fuel_mult", 1.0)
-    avail_p = params.get("avail_p", 0.97)
+    avail_p = params.get("avail_p", 0.96)  # F13: brief Exhibit 6 baseline
 
     route_ids = list(ROUTES)
     demand_mean = np.array([routes[r]["demand"] for r in route_ids], dtype=float)
@@ -67,8 +72,13 @@ def simulate(
     combined = idio + common  # broadcasts over routes
     demand_samples = (demand_mean * (1.0 + combined)).clip(min=0.0)
 
-    # --- sample fuel multiplier
-    fuel_samples = rng.normal(loc=fuel_base, scale=0.08, size=trials).clip(min=0.7)
+    # --- sample fuel multiplier (F12): brief Exhibit 5, discrete 3-scenario.
+    # `fuel_mult` in params acts as a WHAT-IF shift: if the manager sets it to
+    # e.g. 1.2 in the sidebar (High preset), we scale the whole distribution
+    # by that factor, preserving the Low/Base/High mix but centered higher.
+    scenarios = np.array([0.92, 1.00, 1.18])
+    scen_probs = np.array([0.20, 0.55, 0.25])
+    fuel_samples = rng.choice(scenarios, size=trials, p=scen_probs) * float(fuel_base)
 
     # --- sample aircraft availability per type per trial
     # per-aircraft Bernoulli then aggregate: fraction working per type
@@ -89,9 +99,25 @@ def simulate(
             1.0, frac_working[:, r_idx] + (1.0 / max(counts[r_idx], 1))
         )
 
-    # effective RT per trial: scale rows by frac_working
+    # F15 — Weather event (brief: 8% of days a common weather event reduces
+    # usable daily aircraft hours by 10% across the fleet). Sample per trial;
+    # on weather days, effective RTs of every type drop by 10% (fewer flights
+    # actually operate, capacity + fuel + revenue all scale accordingly).
+    weather_days = rng.binomial(1, 0.08, size=trials).astype(bool)
+    weather_factor = np.where(weather_days, 0.90, 1.00)  # (trials,)
+
+    # effective RT per trial: scale rows by frac_working, then by weather
     # shape (trials, 3, 6)
-    scaled_rt = rt_matrix[None, :, :] * frac_working[:, :, None]
+    scaled_rt = (
+        rt_matrix[None, :, :]
+        * frac_working[:, :, None]
+        * weather_factor[:, None, None]
+    )
+
+    # F16 — Fare realization varies ±8% around the stated average fare.
+    # Uniform per trial per route (industry read: literal ±8% range).
+    fare_shock = 1.0 + rng.uniform(-0.08, 0.08, size=(trials, 6))
+    realized_fare = fare[None, :] * fare_shock  # (trials, 6)
 
     # capacity per route (per trial): psi * sum_t seats_t * LF * scaled_rt
     capacity = psi * (scaled_rt * seats[None, :, None] * LF).sum(axis=1)  # (trials,6)
@@ -100,7 +126,8 @@ def simulate(
     pax = np.minimum(demand_samples, capacity)
 
     # revenue, fuel, variable cost per trial
-    revenue = (pax * fare[None, :]).sum(axis=1)
+    # F16 — use realized (shocked) fare, not the base fare
+    revenue = (pax * realized_fare).sum(axis=1)
     # fuel scales with what actually flies (scaled_rt), plus a small ground-tax
     # for aircraft that failed pre-departure (10% of the planned burn — cancellation
     # fees, positioning, unused fuel).
