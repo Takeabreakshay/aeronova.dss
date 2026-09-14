@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ChartHistogramIcon,
@@ -31,6 +31,10 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
   const [risk, setRisk] = useState<RiskResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [trials, setTrials] = useState(2000);
+
+  // Auto-clear the simulation result when params change, so the histogram
+  // and KPIs never show stale numbers relative to the current controls.
+  useEffect(() => { setRisk(null); }, [params]);
 
   async function run() {
     if (!solution) return;

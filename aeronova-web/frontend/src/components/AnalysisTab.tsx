@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   AnalyticsUpIcon,
@@ -18,6 +18,14 @@ export function AnalysisTab({ params }: { params: Params }) {
   const [be, setBe] = useState<any>(null);
   const [betaS, setBetaS] = useState<any>(null);
   const [busy, setBusy] = useState<string | null>(null);
+
+  // Auto-clear all three sweep results when params change so charts and
+  // tables never show stale numbers relative to the current controls.
+  useEffect(() => {
+    setStrat(null);
+    setBe(null);
+    setBetaS(null);
+  }, [params]);
 
   const run = async (key: string, fn: () => Promise<any>, setter: (v: any) => void) => {
     setBusy(key);
