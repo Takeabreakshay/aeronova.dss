@@ -1,0 +1,41 @@
+# --- Node ---
+node_modules/
+dist/
+.vite/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Secrets and env ---
+.env
+.env.local
+.env.*.local
+.streamlit/secrets.toml
+!.streamlit/secrets.toml.example
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- Local ---
+scratchpad/
+
+# --- Scraped reference materials (not ours to publish) ---
+aeronova-dss/reference/
