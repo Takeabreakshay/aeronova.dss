@@ -215,14 +215,14 @@ export function DeployTab({ params, solution }: { params: Params; solution: Solu
               {fuelPct >= 15 ? `Fuel ${fuelPct.toFixed(0)}%` : ""}
             </div>
             <div
-              style={{ width: `${varPct}%`, background: "linear-gradient(90deg, hsl(0 68% 33%), hsl(0 68% 33%))" }}
+              style={{ width: `${varPct}%`, background: "linear-gradient(90deg, hsl(30 18% 48%), hsl(20 12% 22%))" }}
               className="flex items-center justify-center font-mono text-[11px] font-semibold text-ground transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             >
               {varPct >= 10 ? `Variable ${varPct.toFixed(0)}%` : ""}
             </div>
             <div
-              style={{ width: `${profitPct}%`, background: "linear-gradient(90deg, hsl(30 15% 24%), hsl(122 20% 32%))" }}
-              className="flex items-center justify-center font-mono text-[11px] font-semibold text-[hsl(240_10%_4%)] transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+              style={{ width: `${profitPct}%`, background: "linear-gradient(90deg, hsl(122 25% 38%), hsl(122 30% 26%))" }}
+              className="flex items-center justify-center font-mono text-[11px] font-semibold text-ground transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             >
               {profitPct >= 8 ? `Profit ${profitPct.toFixed(0)}%` : ""}
             </div>
