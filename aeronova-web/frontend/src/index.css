@@ -2,154 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* --- Self-hosted Geist + Geist Mono (SIL OFL 1.1, Vercel) ---
- * woff2 files live in /public/fonts/ and are served by Vite verbatim.
- * No network dependency — the app renders correctly offline.
- */
-/* --- Playfair Display (variable weight 400-900) for body and everything else --- */
-@font-face { font-family: 'Playfair Display'; font-style: normal;
-  font-weight: 400 900; font-display: swap;
-  src: url('/fonts/PlayfairDisplay-400-900.woff2') format('woff2-variations'),
-       url('/fonts/PlayfairDisplay-400-900.woff2') format('woff2'); }
-@font-face { font-family: 'Playfair Display'; font-style: italic;
-  font-weight: 400 900; font-display: swap;
-  src: url('/fonts/PlayfairDisplay-400-900-italic.woff2') format('woff2-variations'),
-       url('/fonts/PlayfairDisplay-400-900-italic.woff2') format('woff2'); }
+/* --- Fonts: Fraunces (display, SIL OFL) + Geist (UI, SIL OFL) + Geist Mono --- */
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 300 800;
+  font-display: swap;
+  src: url('/fonts/Fraunces.woff2') format('woff2-variations'),
+       url('/fonts/Fraunces.woff2') format('woff2');
+  font-variation-settings: 'opsz' 72, 'SOFT' 30; }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 300 800;
+  font-display: swap;
+  src: url('/fonts/Fraunces-italic.woff2') format('woff2-variations'),
+       url('/fonts/Fraunces-italic.woff2') format('woff2');
+  font-variation-settings: 'opsz' 72, 'SOFT' 30; }
 
-/* --- Archivo Black (display face, one weight only) for headings --- */
-@font-face { font-family: 'Archivo Black'; font-style: normal; font-weight: 400; font-display: swap;
-  src: url('/fonts/ArchivoBlack-400.woff2') format('woff2'); }
-
-/* --- Geist Mono still around for tabular KPI numbers where alignment matters --- */
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('/fonts/Geist-400.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('/fonts/Geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('/fonts/Geist-600.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('/fonts/Geist-700.woff2') format('woff2'); }
 @font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 400; font-display: swap;
   src: url('/fonts/GeistMono-400.woff2') format('woff2'); }
 @font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 500; font-display: swap;
   src: url('/fonts/GeistMono-500.woff2') format('woff2'); }
-@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 600; font-display: swap;
-  src: url('/fonts/GeistMono-600.woff2') format('woff2'); }
 
 @layer base {
   :root {
-    /* Deep ground — pushed darker so elevation shows */
-    --background: 240 18% 3%;
-    --foreground: 220 20% 96%;
+    /* Trustbank palette — warm paper, deep ink, oxblood accent */
+    --ground:      #FAF7F1;   /* page background */
+    --surface:     #FFFDF7;   /* cards, memo, DSS panels */
+    --sunken:      #F2ECDD;   /* controls background */
+    --ink:         #1C1815;   /* body text */
+    --ink-2:       #3E3630;   /* section leads */
+    --ink-mute:    #6B6156;   /* meta, labels */
+    --ink-faint:   #A8998A;   /* deep meta */
+    --rule:        #E4DDD0;   /* hairline dividers */
+    --rule-2:      #D0C7B4;   /* stronger dividers */
+    --accent:      #8B1A1A;   /* oxblood — the one accent */
+    --accent-soft: #F1E1E1;
+    --accent-2:    #6B1414;
+    --good:        #3D5A3D;   /* semantic — decision verdicts */
+    --good-soft:   #DEE7DE;
+    --warn:        #B87811;
+    --warn-soft:   #F4E7CE;
+    --crit:        #8B1A1A;
+    --crit-soft:   #F1E1E1;
 
-    /* Elevated card — lifted a full step lighter for visible contrast */
-    --card: 240 10% 14%;
-    --card-foreground: 220 20% 96%;
+    /* Tailwind bridge */
+    --background: 40 33% 96%;   /* ground */
+    --foreground: 20 12% 10%;   /* ink */
+    --card: 42 60% 98%;
+    --card-foreground: 20 12% 10%;
+    --primary: 0 68% 33%;       /* accent */
+    --primary-foreground: 40 33% 96%;
+    --secondary: 44 33% 91%;
+    --secondary-foreground: 20 12% 10%;
+    --muted: 44 33% 91%;
+    --muted-foreground: 30 8% 38%;
+    --accent-hsl: 0 68% 33%;
+    --accent-foreground: 40 33% 96%;
+    --border: 40 26% 85%;
+    --input: 40 26% 85%;
+    --ring: 0 68% 33%;
+    --radius: 4px;
+  }
 
-    /* Highest elevation — hero surfaces, glass panels */
-    --elevated: 240 8% 20%;
-
-    /* Luminous (light-side) surface — used sparingly for hero contrast */
-    --luminous: 220 30% 92%;
-    --luminous-foreground: 240 18% 8%;
-    --luminous-mute: 240 10% 32%;
-
-    --primary: 258 90% 66%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 8% 11%;
-    --secondary-foreground: 220 20% 96%;
-    --muted: 240 8% 11%;
-    --muted-foreground: 220 12% 68%;
-    --accent: 240 8% 22%;
-    --accent-foreground: 220 20% 96%;
-    --border: 240 8% 22%;
-    --border-hi: 240 6% 32%;
-    --input: 240 8% 18%;
-    --ring: 258 90% 66%;
-    --radius: 12px;
+  :root[data-theme="dark"], :root:not([data-theme="light"]) {
+    /* Optional dark inversion — user can toggle. Default stays light. */
   }
 
   html, body { height: 100%; }
-
-  /* Headings use Archivo Black (display face). Everything else falls through
-     to Playfair Display via body's font-sans class. */
-  h1, h2, h3, .an-h .title, .an-brand {
-    font-family: 'Archivo Black', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-  }
-
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    background:
-      radial-gradient(1400px 800px at 82% -12%, hsl(258 90% 66% / 0.20), transparent 55%),
-      radial-gradient(1000px 700px at -12% 25%, hsl(188 89% 55% / 0.14), transparent 60%),
-      radial-gradient(800px 600px at 55% 115%, hsl(328 88% 72% / 0.10), transparent 60%),
-      hsl(var(--background));
-    font-feature-settings: "cv11", "ss01";
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
   }
 
-  /* Elevated card — noticeably lighter than the ground.
-     Applied to Card by default via .an-card-elevated + updated card.tsx */
-  .an-elevated {
-    background: linear-gradient(180deg, hsl(240 8% 17%), hsl(240 10% 12%));
-    box-shadow:
-      0 1px 0 hsl(0 0% 100% / 0.06) inset,       /* top light edge */
-      0 -1px 0 hsl(0 0% 0% / 0.4) inset,          /* bottom shadow edge */
-      0 12px 40px -20px hsl(240 30% 2% / 0.7);
-    border-color: hsl(240 8% 24%);
-  }
-
-  /* Luminous variant — light card on dark ground (the "contrast" move) */
-  .an-luminous {
-    background: linear-gradient(180deg, hsl(220 30% 96%), hsl(220 25% 88%));
-    color: hsl(var(--luminous-foreground));
-    border-color: hsl(220 20% 82%);
-    box-shadow:
-      0 1px 0 hsl(0 0% 100%) inset,
-      0 20px 50px -20px hsl(258 60% 20% / 0.4),
-      0 0 0 1px hsl(220 40% 100% / 0.06);
-  }
-  /* Scoped overrides — beat Tailwind utility classes with 0,2,0 specificity. */
-  .an-luminous,
-  .an-luminous p,
-  .an-luminous span,
-  .an-luminous div { color: hsl(var(--luminous-foreground)); }
-  .an-luminous .text-foreground,
-  .an-luminous .text-white { color: hsl(var(--luminous-foreground)); }
-  .an-luminous .text-muted-foreground,
-  .an-luminous .text-muted-foreground\/60,
-  .an-luminous .text-muted-foreground\/70,
-  .an-luminous .text-muted-foreground\/80 { color: hsl(240 12% 38%); }
-  /* Accent colors darken for contrast on light ground */
-  .an-luminous .text-mint  { color: hsl(142 60% 28%); }
-  .an-luminous .text-coral { color: hsl(0 70% 40%); }
-  .an-luminous .text-pink  { color: hsl(328 65% 42%); }
-  .an-luminous .text-cyan  { color: hsl(188 80% 30%); }
-  .an-luminous .text-amber { color: hsl(38 90% 36%); }
-  /* Primary/accent tokens on luminous become deeper violet, not ivory-on-ivory */
-  .an-luminous .text-primary { color: hsl(258 82% 46%); }
-  /* Italics / narration bodies */
-  .an-luminous em,
-  .an-luminous i { color: hsl(240 10% 40%); }
-  /* Borders inside a luminous card should be dark hairlines, not white-on-white */
-  .an-luminous .border-border,
-  .an-luminous .border-primary\/30,
-  .an-luminous .border-primary\/25 { border-color: hsl(240 15% 82%); }
-
-  /* Subtle inner-light rim used on high-contrast dark cards */
-  .an-rim {
-    position: relative;
-  }
-  .an-rim::before {
-    content: "";
-    position: absolute; inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(180deg, hsl(0 0% 100% / 0.12), transparent 30%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  /* Better scrollbars */
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 6px; }
-  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--accent)); }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--ground); }
+  ::-webkit-scrollbar-thumb { background: var(--rule-2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -159,43 +96,13 @@
   }
 }
 
-/* --- Motion catalog (easings and utilities) ---
- * Curves distilled from transitions.dev — Emil Kowalski's public catalog.
- * Values are functional (bezier control points) — safe to reuse.
- */
 @layer utilities {
-  .ease-out-expo    { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  .ease-out-quart   { transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1); }
-  .ease-out-spring  { transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .ease-in-out-soft { transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }
-  .ease-in-fast     { transition-timing-function: cubic-bezier(0.7, 0, 0.84, 0); }
-
-  /* Stagger delays — apply to sibling elements */
-  .stagger-1  { animation-delay:   0ms; }
-  .stagger-2  { animation-delay:  40ms; }
-  .stagger-3  { animation-delay:  80ms; }
-  .stagger-4  { animation-delay: 120ms; }
-  .stagger-5  { animation-delay: 160ms; }
-  .stagger-6  { animation-delay: 200ms; }
+  .font-display { font-family: 'Fraunces', 'Times New Roman', Georgia, serif; }
+  .font-ui      { font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif; }
+  .font-mono    { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace; }
+  .tabular      { font-variant-numeric: tabular-nums; }
 }
 
-@keyframes shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes spring-in {
-  0%   { opacity: 0; transform: scale(0.9) translateY(6px); }
-  60%  { opacity: 1; transform: scale(1.02) translateY(0); }
-  100% { transform: scale(1) translateY(0); }
-}
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 12px hsl(258 90% 66% / 0.3); }
-  50%      { box-shadow: 0 0 24px hsl(258 90% 66% / 0.55); }
-}
-.animate-rise      { animation: rise-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.animate-spring    { animation: spring-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-.animate-glow      { animation: glow-pulse 3s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+/* Simple fade — trustbank layouts are static; motion is a whisper */
+.fade-in { animation: fade 200ms ease-out both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
