@@ -70,6 +70,9 @@ export function AnalysisTab({ params }: { params: Params }) {
         {be && (
           <div className="mt-3 space-y-3">
             <VerdictCard text={be.verdict} />
+            <Card className="p-4 overflow-hidden animate-rise">
+              <BreakEvenChart sweep={be.sweep} breakevenP={be.breakeven_p} />
+            </Card>
             <Card className="p-0 overflow-hidden animate-rise">
               <ResultTable
                 headers={["p_fail", "no reserve", "with reserve", "Δ"]}
@@ -101,6 +104,9 @@ export function AnalysisTab({ params }: { params: Params }) {
         {betaS && (
           <div className="mt-3 space-y-3">
             <VerdictCard text={betaS.verdict} />
+            <Card className="p-4 overflow-hidden animate-rise">
+              <BetaSweepChart sweep={betaS.sweep} flipBeta={betaS.flip_beta} />
+            </Card>
             <Card className="p-0 overflow-hidden animate-rise">
               <ResultTable
                 headers={["β", "no reserve", "with reserve", "favors reserve?"]}
@@ -171,6 +177,226 @@ function VerdictCard({ text }: { text: string }) {
       </div>
       <div className="mt-2 text-[15px] font-medium leading-relaxed">{text}</div>
     </Card>
+  );
+}
+
+// ============================================================================
+//  Hand-drawn SVG charts — trustbank aesthetic
+//  No chart library — just paths, ticks, and labels in editorial style.
+// ============================================================================
+
+function fmtRs(v: number) {
+  const abs = Math.abs(v);
+  if (abs >= 100000) return `${v < 0 ? "-" : ""}${(abs / 100000).toFixed(1)}L`;
+  if (abs >= 1000) return `${v < 0 ? "-" : ""}${(abs / 1000).toFixed(0)}k`;
+  return `${Math.round(v)}`;
+}
+
+function BreakEvenChart({ sweep, breakevenP }: { sweep: any[]; breakevenP: number | null }) {
+  const data = sweep.filter((r) => r.mean_no_reserve !== null && r.mean_with_reserve !== null);
+  if (data.length < 2) {
+    return <div className="font-mono text-xs text-ink-mute py-6 text-center">Not enough data points to plot.</div>;
+  }
+
+  const W = 640, H = 260;
+  const M = { l: 60, r: 20, t: 24, b: 44 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+
+  const xMin = Math.min(...data.map((d) => d.p_fail));
+  const xMax = Math.max(...data.map((d) => d.p_fail));
+  const yVals = data.flatMap((d) => [d.mean_no_reserve, d.mean_with_reserve]);
+  const rawMin = Math.min(...yVals);
+  const rawMax = Math.max(...yVals);
+  const pad = (rawMax - rawMin) * 0.15 || 1;
+  const yMin = rawMin - pad, yMax = rawMax + pad;
+
+  const x = (v: number) => M.l + ((v - xMin) / (xMax - xMin)) * iw;
+  const y = (v: number) => M.t + ih - ((v - yMin) / (yMax - yMin)) * ih;
+
+  const path = (key: string) =>
+    data.map((d, i) => `${i === 0 ? "M" : "L"} ${x(d.p_fail).toFixed(1)} ${y(d[key]).toFixed(1)}`).join(" ");
+
+  const xt = data.map((d) => d.p_fail);
+  const yTickCount = 5;
+  const yt: number[] = [];
+  for (let i = 0; i <= yTickCount; i++) yt.push(yMin + (i * (yMax - yMin)) / yTickCount);
+  const beX = breakevenP != null ? x(breakevenP) : null;
+  const beY = breakevenP != null
+    ? y(data.find((d) => Math.abs(d.p_fail - breakevenP) < 1e-6)?.mean_with_reserve ?? rawMin)
+    : null;
+
+  return (
+    <div>
+      <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute">
+        Profit ~ per-aircraft failure probability
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" style={{ color: "var(--ink)" }}>
+        {/* gridlines */}
+        {yt.map((v, i) => (
+          <line key={i}
+            x1={M.l} y1={y(v)} x2={M.l + iw} y2={y(v)}
+            stroke="currentColor" strokeOpacity="0.06" />
+        ))}
+        {/* axes */}
+        <line x1={M.l} y1={M.t + ih} x2={M.l + iw} y2={M.t + ih} stroke="currentColor" strokeOpacity="0.5" />
+        <line x1={M.l} y1={M.t} x2={M.l} y2={M.t + ih} stroke="currentColor" strokeOpacity="0.5" />
+        {/* y ticks + labels */}
+        {yt.map((v, i) => (
+          <g key={i}>
+            <line x1={M.l - 4} y1={y(v)} x2={M.l} y2={y(v)} stroke="currentColor" strokeOpacity="0.4" />
+            <text x={M.l - 8} y={y(v) + 3} textAnchor="end"
+              fontFamily="Geist Mono" fontSize="10" fill="currentColor" fillOpacity="0.6">
+              {fmtRs(v)}
+            </text>
+          </g>
+        ))}
+        {/* x ticks + labels */}
+        {xt.map((v, i) => (
+          <g key={i}>
+            <line x1={x(v)} y1={M.t + ih} x2={x(v)} y2={M.t + ih + 4} stroke="currentColor" strokeOpacity="0.4" />
+            <text x={x(v)} y={M.t + ih + 18} textAnchor="middle"
+              fontFamily="Geist Mono" fontSize="10" fill="currentColor" fillOpacity="0.6">
+              {(v * 100).toFixed(0)}%
+            </text>
+          </g>
+        ))}
+        {/* no-reserve (dashed, ink) */}
+        <path d={path("mean_no_reserve")} stroke="var(--ink)" strokeWidth="2" fill="none" strokeDasharray="4 3" />
+        {/* with-reserve (solid, accent) */}
+        <path d={path("mean_with_reserve")} stroke="var(--accent)" strokeWidth="2.5" fill="none" />
+
+        {/* break-even marker */}
+        {beX != null && beY != null && (
+          <>
+            <line x1={beX} y1={M.t} x2={beX} y2={M.t + ih}
+              stroke="var(--warn)" strokeWidth="1" strokeDasharray="2 3" />
+            <circle cx={beX} cy={beY} r="5" fill="var(--warn)" stroke="var(--surface)" strokeWidth="2" />
+            <text x={beX + 10} y={beY - 10} fontFamily="Geist Mono" fontSize="10" fill="var(--warn)">
+              BREAK-EVEN · {(breakevenP! * 100).toFixed(1)}%
+            </text>
+          </>
+        )}
+
+        {/* Legend */}
+        <g transform={`translate(${M.l + 16}, ${M.t + 10})`}>
+          <line x1="0" y1="6" x2="24" y2="6" stroke="var(--accent)" strokeWidth="2.5" />
+          <text x="30" y="10" fontFamily="Geist Mono" fontSize="10" fill="var(--accent)">WITH RESERVE</text>
+          <line x1="0" y1="26" x2="24" y2="26" stroke="var(--ink)" strokeWidth="2" strokeDasharray="4 3" />
+          <text x="30" y="30" fontFamily="Geist Mono" fontSize="10" fill="var(--ink)">NO RESERVE</text>
+        </g>
+
+        {/* axis labels */}
+        <text x={M.l + iw / 2} y={H - 6} textAnchor="middle"
+          fontFamily="Geist Mono" fontSize="9" fill="currentColor" fillOpacity="0.6" letterSpacing="1">
+          PER-AIRCRAFT FAILURE PROBABILITY
+        </text>
+        <text x="14" y={M.t + ih / 2} transform={`rotate(-90 14 ${M.t + ih / 2})`} textAnchor="middle"
+          fontFamily="Geist Mono" fontSize="9" fill="currentColor" fillOpacity="0.6" letterSpacing="1">
+          MEAN PROFIT (Rs / DAY)
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+function BetaSweepChart({ sweep, flipBeta }: { sweep: any[]; flipBeta: number | null }) {
+  const data = sweep.filter((r) => r.mean_no !== null && r.mean_yes !== null);
+  if (data.length < 2) {
+    return <div className="font-mono text-xs text-ink-mute py-6 text-center">Not enough data points to plot.</div>;
+  }
+
+  const W = 640, H = 260;
+  const M = { l: 60, r: 20, t: 24, b: 44 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+
+  const xMin = Math.min(...data.map((d) => d.beta));
+  const xMax = Math.max(...data.map((d) => d.beta));
+  const yVals = data.flatMap((d) => [d.mean_no, d.mean_yes]);
+  const rawMin = Math.min(...yVals);
+  const rawMax = Math.max(...yVals);
+  const pad = (rawMax - rawMin) * 0.15 || 1;
+  const yMin = rawMin - pad, yMax = rawMax + pad;
+
+  const x = (v: number) => M.l + ((v - xMin) / (xMax - xMin)) * iw;
+  const y = (v: number) => M.t + ih - ((v - yMin) / (yMax - yMin)) * ih;
+
+  const path = (key: string) =>
+    data.map((d, i) => `${i === 0 ? "M" : "L"} ${x(d.beta).toFixed(1)} ${y(d[key]).toFixed(1)}`).join(" ");
+
+  const xTickIdx = data.map((_, i) => i).filter((i) => i % Math.ceil(data.length / 6) === 0);
+  const yTickCount = 5;
+  const yt: number[] = [];
+  for (let i = 0; i <= yTickCount; i++) yt.push(yMin + (i * (yMax - yMin)) / yTickCount);
+
+  const flipX = flipBeta != null ? x(flipBeta) : null;
+
+  return (
+    <div>
+      <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute">
+        Profit ~ per-passenger variable cost β
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" style={{ color: "var(--ink)" }}>
+        {yt.map((v, i) => (
+          <line key={i}
+            x1={M.l} y1={y(v)} x2={M.l + iw} y2={y(v)}
+            stroke="currentColor" strokeOpacity="0.06" />
+        ))}
+        <line x1={M.l} y1={M.t + ih} x2={M.l + iw} y2={M.t + ih} stroke="currentColor" strokeOpacity="0.5" />
+        <line x1={M.l} y1={M.t} x2={M.l} y2={M.t + ih} stroke="currentColor" strokeOpacity="0.5" />
+
+        {yt.map((v, i) => (
+          <g key={i}>
+            <line x1={M.l - 4} y1={y(v)} x2={M.l} y2={y(v)} stroke="currentColor" strokeOpacity="0.4" />
+            <text x={M.l - 8} y={y(v) + 3} textAnchor="end"
+              fontFamily="Geist Mono" fontSize="10" fill="currentColor" fillOpacity="0.6">
+              {fmtRs(v)}
+            </text>
+          </g>
+        ))}
+        {xTickIdx.map((i) => {
+          const v = data[i].beta;
+          return (
+            <g key={i}>
+              <line x1={x(v)} y1={M.t + ih} x2={x(v)} y2={M.t + ih + 4} stroke="currentColor" strokeOpacity="0.4" />
+              <text x={x(v)} y={M.t + ih + 18} textAnchor="middle"
+                fontFamily="Geist Mono" fontSize="10" fill="currentColor" fillOpacity="0.6">
+                {v}
+              </text>
+            </g>
+          );
+        })}
+
+        <path d={path("mean_no")} stroke="var(--ink)" strokeWidth="2" fill="none" strokeDasharray="4 3" />
+        <path d={path("mean_yes")} stroke="var(--accent)" strokeWidth="2.5" fill="none" />
+
+        {/* flip marker (if any) */}
+        {flipX != null && (
+          <>
+            <line x1={flipX} y1={M.t} x2={flipX} y2={M.t + ih}
+              stroke="var(--warn)" strokeWidth="1" strokeDasharray="2 3" />
+            <text x={flipX + 8} y={M.t + 14} fontFamily="Geist Mono" fontSize="10" fill="var(--warn)">
+              VERDICT FLIPS · β ≈ {flipBeta}
+            </text>
+          </>
+        )}
+
+        <g transform={`translate(${M.l + 16}, ${M.t + 10})`}>
+          <line x1="0" y1="6" x2="24" y2="6" stroke="var(--accent)" strokeWidth="2.5" />
+          <text x="30" y="10" fontFamily="Geist Mono" fontSize="10" fill="var(--accent)">WITH RESERVE</text>
+          <line x1="0" y1="26" x2="24" y2="26" stroke="var(--ink)" strokeWidth="2" strokeDasharray="4 3" />
+          <text x="30" y="30" fontFamily="Geist Mono" fontSize="10" fill="var(--ink)">NO RESERVE</text>
+        </g>
+
+        <text x={M.l + iw / 2} y={H - 6} textAnchor="middle"
+          fontFamily="Geist Mono" fontSize="9" fill="currentColor" fillOpacity="0.6" letterSpacing="1">
+          β · VARIABLE COST PER PASSENGER (Rs)
+        </text>
+        <text x="14" y={M.t + ih / 2} transform={`rotate(-90 14 ${M.t + ih / 2})`} textAnchor="middle"
+          fontFamily="Geist Mono" fontSize="9" fill="currentColor" fillOpacity="0.6" letterSpacing="1">
+          MEAN PROFIT (Rs / DAY)
+        </text>
+      </svg>
+    </div>
   );
 }
 
