@@ -47,7 +47,12 @@ export function RecoverTab({ params, solution }: { params: Params; solution: Sol
             <div className="flex gap-1 flex-wrap">
               {TAILS.map((t, i) => {
                 const type = t[0];
-                const color = type === "A" ? "hsl(30 15% 24%)" : type === "B" ? "hsl(0 68% 33%)" : "hsl(0 68% 33%)";
+                // Hex colors so ${color}22/33/55 alpha-suffix trick works.
+                // Three distinct warm tones so A/B/C read differently on cream.
+                const color =
+                  type === "A" ? "#7C6C57"      // A · warm tan (small · 78 seats)
+                  : type === "B" ? "#8B1A1A"    // B · oxblood accent (mid · 120 seats)
+                  : "#1C1815";                  // C · ink (large · 180 seats)
                 const isSelected = tail === t;
                 return (
                   <button

@@ -9,10 +9,12 @@ import { Card } from "@/components/ui/card";
 import { formatRs, pct } from "@/lib/utils";
 import type { Params, Solution } from "@/lib/api";
 
+// Hex colors so the `${color}22`/`${color}55` alpha-suffix trick works.
+// Three distinct warm tones so A/B/C read differently on cream.
 const TYPE_META: Record<string, { color: string; label: string }> = {
-  A: { color: "hsl(30 15% 24%)", label: "78-seat" },
-  B: { color: "hsl(0 68% 33%)", label: "120-seat" },
-  C: { color: "hsl(0 68% 33%)", label: "180-seat" },
+  A: { color: "#7C6C57", label: "78-seat"  },   // warm tan
+  B: { color: "#8B1A1A", label: "120-seat" },   // oxblood accent
+  C: { color: "#1C1815", label: "180-seat" },   // ink
 };
 
 function KPI({ label, value, delta, delay = 0, tone, variant }: {
