@@ -32,7 +32,9 @@ def _nvidia_client():
             key = None
     if not key:
         return None
-    return OpenAI(base_url=NVIDIA_BASE_URL, api_key=key)
+    # 20 s cap — if Nemotron is slow the regex fallback runs, keeping /chat
+    # responsive within Render's request-timeout window.
+    return OpenAI(base_url=NVIDIA_BASE_URL, api_key=key, timeout=20.0)
 
 
 def _strip_json_fence(body: str) -> str:

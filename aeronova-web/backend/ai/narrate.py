@@ -37,7 +37,10 @@ def _nvidia_client():
             key = None
     if not key:
         return None
-    return OpenAI(base_url=NVIDIA_BASE_URL, api_key=key)
+    # 20 s cap — same rationale as ai/parse.py: if Nemotron stalls, the
+    # template narrator returns instantly, keeping /chat under Render's
+    # request-timeout window instead of hanging the connection.
+    return OpenAI(base_url=NVIDIA_BASE_URL, api_key=key, timeout=20.0)
 
 
 _NUMBER_RE = re.compile(r"-?\d[\d,]*\.?\d*")
