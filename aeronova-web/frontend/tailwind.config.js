@@ -42,8 +42,9 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["Geist Mono", "ui-monospace", "SFMono-Regular", "monospace"],
+        sans:    ['"Playfair Display"', "Georgia", '"Times New Roman"', "serif"],
+        display: ['"Archivo Black"', "ui-sans-serif", "system-ui", "sans-serif"],
+        mono:    ['"Geist Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
       },
       keyframes: {
         "enter": {
