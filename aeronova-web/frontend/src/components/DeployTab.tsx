@@ -10,9 +10,9 @@ import { formatRs, pct } from "@/lib/utils";
 import type { Params, Solution } from "@/lib/api";
 
 const TYPE_META: Record<string, { color: string; label: string }> = {
-  A: { color: "hsl(188 89% 55%)", label: "78-seat" },
-  B: { color: "hsl(258 90% 66%)", label: "120-seat" },
-  C: { color: "hsl(328 88% 72%)", label: "180-seat" },
+  A: { color: "hsl(30 15% 24%)", label: "78-seat" },
+  B: { color: "hsl(0 68% 33%)", label: "120-seat" },
+  C: { color: "hsl(0 68% 33%)", label: "180-seat" },
 };
 
 function KPI({ label, value, delta, delay = 0, tone, variant }: {
@@ -30,7 +30,7 @@ function KPI({ label, value, delta, delay = 0, tone, variant }: {
       style={{ animationDelay: `${delay}ms` }}
     >
       {!isLuminous && (
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
       )}
       <div className={`font-mono text-[10px] font-medium uppercase tracking-[0.14em] ${isLuminous ? "text-[hsl(240_15%_35%)]" : "text-muted-foreground"}`}>
         {label}
@@ -48,7 +48,7 @@ function KPI({ label, value, delta, delay = 0, tone, variant }: {
 function SectionTitle({ title, desc, icon, color }: { title: string; desc: string; icon: any; color?: string }) {
   return (
     <div className="mb-3 flex items-center gap-2.5 animate-rise">
-      <span style={{ color: color ?? "hsl(258 92% 76%)" }}>
+      <span style={{ color: color ?? "hsl(0 68% 33%)" }}>
         <HugeiconsIcon icon={icon} size={20} strokeWidth={1.6} />
       </span>
       <span className="text-lg font-semibold tracking-tight">{title}</span>
@@ -62,7 +62,7 @@ function RouteCard({ id, params, solution, delay = 0 }: { id: string; params: Pa
   const served = solution.carried[id] ?? 0;
   const demand = route.demand;
   const fill = Math.min(1, demand ? served / demand : 0);
-  const barColor = fill >= 0.9 ? "hsl(142 71% 60%)" : fill >= 0.7 ? "hsl(48 96% 62%)" : "hsl(0 89% 71%)";
+  const barColor = fill >= 0.9 ? "hsl(122 20% 32%)" : fill >= 0.7 ? "hsl(36 84% 42%)" : "hsl(0 68% 33%)";
   const operating = solution.operate[id];
 
   const types = (["A", "B", "C"] as const)
@@ -79,13 +79,13 @@ function RouteCard({ id, params, solution, delay = 0 }: { id: string; params: Pa
           <span className="font-mono text-lg font-semibold">{id}</span>
           <span
             className="font-mono text-[10px] tracking-[0.14em] inline-flex items-center gap-1"
-            style={{ color: operating ? "hsl(142 71% 60%)" : "hsl(0 89% 71%)" }}
+            style={{ color: operating ? "hsl(122 20% 32%)" : "hsl(0 68% 33%)" }}
           >
             <span
               className="h-1.5 w-1.5 rounded-full"
               style={{
-                background: operating ? "hsl(142 71% 60%)" : "hsl(0 89% 71%)",
-                boxShadow: `0 0 6px ${operating ? "hsl(142 71% 60%)" : "hsl(0 89% 71%)"}`,
+                background: operating ? "hsl(122 20% 32%)" : "hsl(0 68% 33%)",
+                boxShadow: `0 0 6px ${operating ? "hsl(122 20% 32%)" : "hsl(0 68% 33%)"}`,
               }}
             />
             {operating ? "OPERATING" : "OFFLINE"}
@@ -123,7 +123,7 @@ function RouteCard({ id, params, solution, delay = 0 }: { id: string; params: Pa
         </span>
         <span style={{ color: barColor }}>{(fill * 100).toFixed(0)}% filled</span>
       </div>
-      <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+      <div className="h-1.5 rounded-full bg-ink/[0.06] overflow-hidden">
         <div
           className="h-full rounded-full transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
           style={{ width: `${fill * 100}%`, background: barColor }}
@@ -198,28 +198,28 @@ export function DeployTab({ params, solution }: { params: Params; solution: Solu
           title="Where the money goes"
           desc="Revenue split into fuel, variable cost, and profit"
           icon={Coins01Icon}
-          color="hsl(48 96% 62%)"
+          color="hsl(36 84% 42%)"
         />
         <Card className="p-5 animate-spring">
           <div className="mb-2.5 flex justify-between font-mono text-xs text-muted-foreground">
             <span>Revenue <b className="text-foreground">Rs {formatRs(f.revenue)}</b></span>
             <span>Profit <b className={f.profit >= 0 ? "text-mint" : "text-coral"}>Rs {formatRs(f.profit)}</b></span>
           </div>
-          <div className="flex h-8 rounded-lg overflow-hidden bg-white/[0.04] border border-border">
+          <div className="flex h-8 rounded-lg overflow-hidden bg-ink/[0.04] border border-border">
             <div
-              style={{ width: `${fuelPct}%`, background: "linear-gradient(90deg, hsl(0 89% 71%), hsl(48 96% 62%))" }}
-              className="flex items-center justify-center font-mono text-[11px] font-semibold text-white transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+              style={{ width: `${fuelPct}%`, background: "linear-gradient(90deg, hsl(0 68% 33%), hsl(36 84% 42%))" }}
+              className="flex items-center justify-center font-mono text-[11px] font-semibold text-ground transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             >
               {fuelPct >= 15 ? `Fuel ${fuelPct.toFixed(0)}%` : ""}
             </div>
             <div
-              style={{ width: `${varPct}%`, background: "linear-gradient(90deg, hsl(328 88% 72%), hsl(258 90% 66%))" }}
-              className="flex items-center justify-center font-mono text-[11px] font-semibold text-white transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+              style={{ width: `${varPct}%`, background: "linear-gradient(90deg, hsl(0 68% 33%), hsl(0 68% 33%))" }}
+              className="flex items-center justify-center font-mono text-[11px] font-semibold text-ground transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             >
               {varPct >= 10 ? `Variable ${varPct.toFixed(0)}%` : ""}
             </div>
             <div
-              style={{ width: `${profitPct}%`, background: "linear-gradient(90deg, hsl(188 89% 55%), hsl(142 71% 60%))" }}
+              style={{ width: `${profitPct}%`, background: "linear-gradient(90deg, hsl(30 15% 24%), hsl(122 20% 32%))" }}
               className="flex items-center justify-center font-mono text-[11px] font-semibold text-[hsl(240_10%_4%)] transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             >
               {profitPct >= 8 ? `Profit ${profitPct.toFixed(0)}%` : ""}

@@ -16,7 +16,7 @@ export function TopNav({ strategy, reserve, coverage, profit }: Props) {
   return (
     <div className="mb-4 flex items-center justify-between rounded-lg border border-border bg-card/70 px-4 py-3 backdrop-blur-xl backdrop-saturate-150 shadow-md animate-rise">
       <div className="flex items-center gap-3">
-        <div className="grid h-9 w-9 place-items-center rounded-[10px] bg-gradient-to-br from-primary to-cyan text-white font-bold shadow-[0_0_24px_hsl(258_90%_66%_/_0.5)] transition-transform duration-200 ease-out-spring hover:scale-105 hover:-rotate-3">
+        <div className="grid h-9 w-9 place-items-center rounded-[10px] bg-accent text-ground font-bold shadow-[0_0_24px_hsl(258_90%_66%_/_0.5)] transition-transform duration-200 ease-out-spring hover:scale-105 hover:-rotate-3">
           A
         </div>
         <div className="text-sm font-bold tracking-tight leading-tight">

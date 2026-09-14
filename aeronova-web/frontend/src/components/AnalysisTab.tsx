@@ -141,14 +141,14 @@ function AnalysisSection({
   return (
     <section className="animate-rise" style={{ animationDelay: `${delay}ms` }}>
       <div className="mb-3 flex items-center gap-2.5">
-        <span className="text-[hsl(258_92%_76%)]">
+        <span className="text-[hsl(0_68%_33%)]">
           <HugeiconsIcon icon={icon} size={20} strokeWidth={1.6} />
         </span>
         <span className="text-lg font-semibold tracking-tight">{title}</span>
         <span className="text-[13px] text-muted-foreground">{desc}</span>
       </div>
       {info && (
-        <div className="mb-3 rounded-md border border-primary/25 bg-primary/[0.06] px-3 py-2 font-mono text-[11px] text-muted-foreground">
+        <div className="mb-3 rounded-md border border-accent/[0.25] bg-accent/[0.06] px-3 py-2 font-mono text-[11px] text-muted-foreground">
           ◆ {info}
         </div>
       )}
@@ -165,7 +165,7 @@ function AnalysisSection({
 function VerdictCard({ text }: { text: string }) {
   return (
     <Card variant="luminous" className="p-5 animate-spring">
-      <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em]" style={{ color: "hsl(258 80% 45%)" }}>
+      <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em]" style={{ color: "hsl(0 68% 33%)" }}>
         <HugeiconsIcon icon={CheckmarkCircle02Icon} size={12} strokeWidth={1.8} />
         Verdict
       </div>
@@ -178,7 +178,7 @@ function ResultTable({ headers, rows }: { headers: string[]; rows: any[][] }) {
   return (
     <table className="w-full font-mono text-[12.5px]">
       <thead>
-        <tr className="border-b border-border bg-secondary/50">
+        <tr className="border-b border-border bg-sunken/50">
           {headers.map((h) => (
             <th key={h} className="px-3 py-2 text-left text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground">{h}</th>
           ))}
@@ -188,7 +188,7 @@ function ResultTable({ headers, rows }: { headers: string[]; rows: any[][] }) {
         {rows.map((row, i) => (
           <tr
             key={i}
-            className="border-b border-border/60 last:border-0 hover:bg-white/[0.02] transition-colors duration-150 animate-rise"
+            className="border-b border-border/60 last:border-0 hover:bg-ink/[0.02] transition-colors duration-150 animate-rise"
             style={{ animationDelay: `${i * 30}ms` }}
           >
             {row.map((c, j) => <td key={j} className="px-3 py-2">{c}</td>)}

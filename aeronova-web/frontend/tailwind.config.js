@@ -24,6 +24,13 @@ export default {
         "warn-soft": "var(--warn-soft)",
         crit: "var(--crit)",
         "crit-soft": "var(--crit-soft)",
+        // Bridge — old components use these; map to light-palette equivalents
+        mint:  "var(--good)",
+        amber: "var(--warn)",
+        coral: "var(--crit)",
+        pink:  "var(--accent)",
+        cyan:  "var(--ink-2)",
+        "border-hi": "var(--rule-2)",
         // shadcn bridge (kept so residual card/button primitives still work)
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

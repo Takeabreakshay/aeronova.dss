@@ -47,7 +47,7 @@ export function RecoverTab({ params, solution }: { params: Params; solution: Sol
             <div className="flex gap-1 flex-wrap">
               {TAILS.map((t, i) => {
                 const type = t[0];
-                const color = type === "A" ? "hsl(188 89% 55%)" : type === "B" ? "hsl(258 90% 66%)" : "hsl(328 88% 72%)";
+                const color = type === "A" ? "hsl(30 15% 24%)" : type === "B" ? "hsl(0 68% 33%)" : "hsl(0 68% 33%)";
                 const isSelected = tail === t;
                 return (
                   <button
@@ -55,7 +55,7 @@ export function RecoverTab({ params, solution }: { params: Params; solution: Sol
                     onClick={() => setTail(t)}
                     className={`rounded-md border px-2.5 py-1 font-mono text-[11px] transition-[transform,border-color,color,background-color,box-shadow] duration-150 ease-out-expo active:scale-[0.97] animate-rise
                       ${isSelected
-                        ? "text-white shadow-[0_0_16px_hsl(var(--primary)_/_0.35)]"
+                        ? "text-ground shadow-[0_0_16px_hsl(var(--primary)_/_0.35)]"
                         : "border-border text-muted-foreground hover:border-primary hover:-translate-y-px"}`}
                     style={{
                       animationDelay: `${i * 20}ms`,
@@ -109,7 +109,7 @@ export function RecoverTab({ params, solution }: { params: Params; solution: Sol
             </div>
           </>
         ) : (
-          <div className="rounded-md border border-primary/25 bg-primary/[0.06] px-3.5 py-3 font-mono text-xs text-muted-foreground">
+          <div className="rounded-md border border-accent/[0.25] bg-accent/[0.06] px-3.5 py-3 font-mono text-xs text-muted-foreground">
             ◆ Pick a tail. The engine will re-plan, decide on the reserve, and show the rupee impact.
           </div>
         )}
@@ -127,7 +127,7 @@ function KPI({
       className="p-3.5 group relative overflow-hidden animate-spring"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
       <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{label}</div>
       <div className={`mt-1 font-mono text-xl font-medium tabular-nums ${color}`}>{value}</div>
       {subtitle && <div className={`mt-0.5 font-mono text-[10.5px] ${color} opacity-70`}>{subtitle}</div>}

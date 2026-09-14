@@ -20,7 +20,7 @@ function KPI({ label, value, delay = 0, tone }: { label: string; value: string; 
       className="p-3.5 group relative overflow-hidden animate-rise"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
       <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{label}</div>
       <div className={`mt-1 font-mono text-xl font-medium tabular-nums ${color}`}>{value}</div>
     </Card>
@@ -47,7 +47,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
     <div className="space-y-5">
       {/* Header */}
       <div className="mb-3 flex items-center gap-2.5 animate-rise">
-        <span className="text-[hsl(258_92%_76%)]">
+        <span className="text-[hsl(0_68%_33%)]">
           <HugeiconsIcon icon={ChartHistogramIcon} size={20} strokeWidth={1.6} />
         </span>
         <span className="text-lg font-semibold tracking-tight">Risk envelope</span>
@@ -67,7 +67,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
               key={n}
               onClick={() => setTrials(n)}
               className={`rounded-full border px-3 py-1 font-mono text-[11px] transition-[transform,border-color,color,background-color] duration-150 ease-out-expo active:scale-[0.97]
-                ${trials === n ? "border-primary bg-primary/15 text-white" : "border-border text-muted-foreground hover:border-primary hover:-translate-y-px hover:text-[hsl(258_92%_76%)]"}`}
+                ${trials === n ? "border-primary bg-accent/[0.15] text-ground" : "border-border text-muted-foreground hover:border-primary hover:-translate-y-px hover:text-[hsl(0_68%_33%)]"}`}
             >
               {n.toLocaleString()}
             </button>
@@ -96,21 +96,21 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
               <BarChart data={bins} margin={{ top: 4, right: 8, left: 4, bottom: 4 }}>
                 <defs>
                   <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(258 90% 66%)" stopOpacity={0.95} />
-                    <stop offset="100%" stopColor="hsl(258 90% 50%)" stopOpacity={0.55} />
+                    <stop offset="0%" stopColor="hsl(0 68% 33%)" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="hsl(0 68% 33%)" stopOpacity={0.55} />
                   </linearGradient>
                 </defs>
                 <XAxis
                   dataKey="x"
                   tickFormatter={(v) => formatRs(v)}
-                  stroke="hsl(240 8% 50%)"
+                  stroke="hsl(30 8% 45%)"
                   style={{ fontSize: 10, fontFamily: "Geist Mono" }}
                 />
-                <YAxis stroke="hsl(240 8% 50%)" style={{ fontSize: 10, fontFamily: "Geist Mono" }} />
+                <YAxis stroke="hsl(30 8% 45%)" style={{ fontSize: 10, fontFamily: "Geist Mono" }} />
                 <Tooltip
                   contentStyle={{
-                    background: "hsl(240 8% 8%)",
-                    border: "1px solid hsl(240 6% 26%)",
+                    background: "hsl(42 60% 98%)",
+                    border: "1px solid hsl(40 20% 78%)",
                     borderRadius: 10,
                     fontFamily: "Geist Mono",
                     fontSize: 12,
@@ -123,15 +123,15 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
                 />
                 <ReferenceLine
                   x={risk.p5}
-                  stroke="hsl(0 89% 71%)"
+                  stroke="hsl(0 68% 33%)"
                   strokeDasharray="4 4"
-                  label={{ value: "P5", fill: "hsl(0 89% 71%)", fontSize: 10, position: "top" }}
+                  label={{ value: "P5", fill: "hsl(0 68% 33%)", fontSize: 10, position: "top" }}
                 />
                 <ReferenceLine
                   x={risk.mean_profit}
-                  stroke="hsl(48 96% 62%)"
+                  stroke="hsl(36 84% 42%)"
                   strokeDasharray="4 4"
-                  label={{ value: "Mean", fill: "hsl(48 96% 62%)", fontSize: 10, position: "top" }}
+                  label={{ value: "Mean", fill: "hsl(36 84% 42%)", fontSize: 10, position: "top" }}
                 />
                 <Bar
                   dataKey="count"
@@ -147,7 +147,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
           {/* Route vulnerability */}
           <div>
             <div className="mb-3 flex items-center gap-2.5 animate-rise">
-              <span className="text-[hsl(0_89%_71%)]">
+              <span className="text-[hsl(0_68%_33%)]">
                 <HugeiconsIcon icon={Alert02Icon} size={20} strokeWidth={1.6} />
               </span>
               <span className="text-lg font-semibold tracking-tight">Route vulnerability</span>
@@ -155,7 +155,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
                 Which routes cancel or spill most under stress
               </span>
             </div>
-            <div className="mb-3 rounded-md border border-primary/25 bg-primary/[0.06] px-3 py-2 font-mono text-[11px] text-muted-foreground">
+            <div className="mb-3 rounded-md border border-accent/[0.25] bg-accent/[0.06] px-3 py-2 font-mono text-[11px] text-muted-foreground">
               ◆ Ranking uses correlated demand shocks (system factor + per-route noise) so the tail isn't understated.
             </div>
             <div className="space-y-1.5">
@@ -163,11 +163,11 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
                 .sort(([, a]: any, [, b]: any) => b.spill_rate - a.spill_rate)
                 .map(([r, v]: any, i) => {
                   const spill = v.spill_rate * 100;
-                  const col = spill > 15 ? "hsl(0 89% 71%)" : spill > 5 ? "hsl(48 96% 62%)" : "hsl(142 71% 60%)";
+                  const col = spill > 15 ? "hsl(0 68% 33%)" : spill > 5 ? "hsl(36 84% 42%)" : "hsl(122 20% 32%)";
                   return (
                     <div
                       key={r}
-                      className="flex items-center gap-3.5 rounded-lg border border-border bg-white/[0.02] px-3.5 py-2.5 hover:border-border-hi transition-colors duration-150 ease-out-expo animate-rise"
+                      className="flex items-center gap-3.5 rounded-lg border border-border bg-ink/[0.02] px-3.5 py-2.5 hover:border-border-hi transition-colors duration-150 ease-out-expo animate-rise"
                       style={{ animationDelay: `${i * 40}ms` }}
                     >
                       <div className="flex min-w-[52px] items-center gap-1.5">
@@ -184,7 +184,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
                             {spill.toFixed(1)}% spill · {(v.cancel_rate * 100).toFixed(1)}% cancel
                           </span>
                         </div>
-                        <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
+                        <div className="h-1 rounded-full bg-ink/[0.06] overflow-hidden">
                           <div
                             className="h-full rounded-full transition-[width] duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
                             style={{ width: `${Math.min(100, spill * 2)}%`, background: col }}

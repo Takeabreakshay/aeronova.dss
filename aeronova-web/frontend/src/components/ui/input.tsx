@@ -7,7 +7,7 @@ export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttribute
       type={type}
       ref={ref}
       className={cn(
-        "flex h-9 w-full rounded-md border border-border bg-secondary px-3 py-1 text-sm",
+        "flex h-9 w-full rounded-md border border-border bg-sunken px-3 py-1 text-sm",
         "transition-[border-color,box-shadow] duration-150 ease-out",
         "placeholder:text-muted-foreground",
         "focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20",
@@ -38,7 +38,7 @@ export const Slider = React.forwardRef<
       type="range"
       ref={ref}
       className={cn(
-        "w-full h-1.5 bg-secondary rounded-full appearance-none cursor-pointer",
+        "w-full h-1.5 bg-sunken rounded-full appearance-none cursor-pointer",
         "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5",
         "[&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary",
         "[&::-webkit-slider-thumb]:shadow-[0_0_12px_hsl(258_90%_66%_/_0.6)]",
