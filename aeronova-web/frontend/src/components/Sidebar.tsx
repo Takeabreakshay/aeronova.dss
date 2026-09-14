@@ -78,7 +78,7 @@ export function Sidebar({ params, setParams }: Props) {
               onClick={() => update({ strategy: s })}
               className={`rounded-full border px-3 py-1 font-mono text-[11px] transition-[transform,border-color,color,background-color] duration-150 ease-out-expo active:scale-[0.97]
                 ${params.strategy === s
-                  ? "border-primary bg-gradient-to-br from-accent/[0.25] to-accent/[0.15] text-ground"
+                  ? "border-primary bg-gradient-to-br from-accent/[0.25] to-accent/[0.15] text-ink"
                   : "border-border bg-card text-muted-foreground hover:border-primary hover:-translate-y-px hover:text-[hsl(0_68%_33%)]"}`}
             >
               {s}
@@ -96,7 +96,7 @@ export function Sidebar({ params, setParams }: Props) {
               onClick={() => applyGlobalShift(n)}
               className={`flex-1 rounded-md border px-1.5 py-1 font-mono text-[10px] transition-[transform,border-color,color] duration-150 ease-out-expo active:scale-[0.95]
                 ${currentGlobalShift === n
-                  ? "border-primary bg-accent/[0.15] text-ground"
+                  ? "border-primary bg-accent/[0.15] text-ink"
                   : "border-border text-muted-foreground hover:border-primary hover:text-[hsl(0_68%_33%)]"}`}
             >
               {n > 0 ? `+${n}%` : n === 0 ? "0" : `${n}%`}
@@ -129,7 +129,7 @@ export function Sidebar({ params, setParams }: Props) {
               onClick={() => update({ fuel_mult: s.val })}
               className={`flex-1 rounded-md border px-2 py-1 font-mono text-[11px] transition-[transform,border-color,color] duration-150 ease-out-expo active:scale-[0.95]
                 ${fuelPreset === s.key
-                  ? "border-primary bg-accent/[0.15] text-ground"
+                  ? "border-primary bg-accent/[0.15] text-ink"
                   : "border-border text-muted-foreground hover:border-primary hover:text-[hsl(0_68%_33%)]"}`}
             >
               {s.label} {s.val.toFixed(2)}×
@@ -158,7 +158,7 @@ export function Sidebar({ params, setParams }: Props) {
               onClick={() => update({ reserve_type: r })}
               className={`flex-1 rounded-md border px-2 py-1 font-mono text-[11px] transition-[transform,border-color,color,background-color] duration-150 ease-out-expo active:scale-[0.97]
                 ${(params.reserve_type ?? null) === r
-                  ? "border-primary bg-accent/[0.15] text-ground"
+                  ? "border-primary bg-accent/[0.15] text-ink"
                   : "border-border text-muted-foreground hover:border-primary hover:text-[hsl(0_68%_33%)]"}`}
             >
               {r ?? "OFF"}

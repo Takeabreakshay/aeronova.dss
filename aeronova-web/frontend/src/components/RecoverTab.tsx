@@ -60,7 +60,7 @@ export function RecoverTab({ params, solution }: { params: Params; solution: Sol
                     onClick={() => setTail(t)}
                     className={`rounded-md border px-2.5 py-1 font-mono text-[11px] transition-[transform,border-color,color,background-color,box-shadow] duration-150 ease-out-expo active:scale-[0.97] animate-rise
                       ${isSelected
-                        ? "text-ground shadow-[0_0_16px_hsl(var(--primary)_/_0.35)]"
+                        ? "text-ink font-semibold shadow-[0_0_16px_hsl(var(--primary)_/_0.35)]"
                         : "border-border text-muted-foreground hover:border-primary hover:-translate-y-px"}`}
                     style={{
                       animationDelay: `${i * 20}ms`,

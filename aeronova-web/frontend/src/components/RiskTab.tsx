@@ -67,7 +67,7 @@ export function RiskTab({ params, solution }: { params: Params; solution: Soluti
               key={n}
               onClick={() => setTrials(n)}
               className={`rounded-full border px-3 py-1 font-mono text-[11px] transition-[transform,border-color,color,background-color] duration-150 ease-out-expo active:scale-[0.97]
-                ${trials === n ? "border-primary bg-accent/[0.15] text-ground" : "border-border text-muted-foreground hover:border-primary hover:-translate-y-px hover:text-[hsl(0_68%_33%)]"}`}
+                ${trials === n ? "border-primary bg-accent/[0.15] text-ink" : "border-border text-muted-foreground hover:border-primary hover:-translate-y-px hover:text-[hsl(0_68%_33%)]"}`}
             >
               {n.toLocaleString()}
             </button>
